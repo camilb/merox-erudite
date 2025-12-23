@@ -20,13 +20,22 @@ import tailwindcss from '@tailwindcss/vite'
 
 const VITE_ALLOWED_HOSTS = ['merox.horu.dev', '.horu.dev'] as const
 
-const DEBUG_VITE_ALLOWED_HOSTS = (globalThis as any)?.process?.env
-  ?.DEBUG_VITE_ALLOWED_HOSTS
+const ENV = (globalThis as any)?.process?.env as
+  | Record<string, string | undefined>
+  | undefined
+
+const DEBUG_VITE_ALLOWED_HOSTS = ENV?.DEBUG_VITE_ALLOWED_HOSTS
+const VITE_ALLOWED_HOSTS_ALL =
+  ENV?.VITE_ALLOWED_HOSTS_ALL === '1' || ENV?.VITE_ALLOWED_HOSTS_ALL === 'true'
+
+const VITE_ALLOWED_HOSTS_CONFIG: true | string[] = VITE_ALLOWED_HOSTS_ALL
+  ? true
+  : [...VITE_ALLOWED_HOSTS]
 
 if (DEBUG_VITE_ALLOWED_HOSTS) {
   // Helpful when debugging remote deployments (k8s/ingress/proxy): confirms config is actually loaded.
   // eslint-disable-next-line no-console
-  console.log('[astro.config] vite.allowedHosts =', VITE_ALLOWED_HOSTS)
+  console.log('[astro.config] vite.allowedHosts =', VITE_ALLOWED_HOSTS_CONFIG)
 }
 
 export default defineConfig({
@@ -88,11 +97,11 @@ export default defineConfig({
     server: {
       // Vite matches allowed hosts against the Host header. Using a leading dot allows the
       // apex domain and all subdomains (e.g. `.horu.dev` allows `merox.horu.dev`, `www.merox.horu.dev`, etc).
-      allowedHosts: [...VITE_ALLOWED_HOSTS],
+      allowedHosts: VITE_ALLOWED_HOSTS_CONFIG,
       host: true,
     },
     preview: {
-      allowedHosts: [...VITE_ALLOWED_HOSTS],
+      allowedHosts: VITE_ALLOWED_HOSTS_CONFIG,
       host: true,
     },
   },
