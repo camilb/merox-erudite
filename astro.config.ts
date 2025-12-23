@@ -75,10 +75,14 @@ export default defineConfig({
     // This is the recommended approach per Astro documentation for Vite plugins
     plugins: [tailwindcss() as any],
     server: {
-      allowedHosts: ['merox.horu.dev'],
+      // Vite matches allowed hosts against the Host header. Using a leading dot allows the
+      // apex domain and all subdomains (e.g. `.horu.dev` allows `merox.horu.dev`, `www.merox.horu.dev`, etc).
+      allowedHosts: ['.horu.dev'],
+      host: true,
     },
     preview: {
-      allowedHosts: ['merox.horu.dev'],
+      allowedHosts: ['.horu.dev'],
+      host: true,
     },
   },
   server: {
