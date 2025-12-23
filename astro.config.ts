@@ -18,6 +18,17 @@ import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
 
 import tailwindcss from '@tailwindcss/vite'
 
+const VITE_ALLOWED_HOSTS = ['merox.horu.dev', '.horu.dev'] as const
+
+const DEBUG_VITE_ALLOWED_HOSTS = (globalThis as any)?.process?.env
+  ?.DEBUG_VITE_ALLOWED_HOSTS
+
+if (DEBUG_VITE_ALLOWED_HOSTS) {
+  // Helpful when debugging remote deployments (k8s/ingress/proxy): confirms config is actually loaded.
+  // eslint-disable-next-line no-console
+  console.log('[astro.config] vite.allowedHosts =', VITE_ALLOWED_HOSTS)
+}
+
 export default defineConfig({
   site: 'https://merox.horu.dev', // Update with your domain
   // Static output - API routes are handled by Cloudflare Pages Functions in /functions folder
@@ -77,11 +88,11 @@ export default defineConfig({
     server: {
       // Vite matches allowed hosts against the Host header. Using a leading dot allows the
       // apex domain and all subdomains (e.g. `.horu.dev` allows `merox.horu.dev`, `www.merox.horu.dev`, etc).
-      allowedHosts: ['.horu.dev'],
+      allowedHosts: [...VITE_ALLOWED_HOSTS],
       host: true,
     },
     preview: {
-      allowedHosts: ['.horu.dev'],
+      allowedHosts: [...VITE_ALLOWED_HOSTS],
       host: true,
     },
   },
