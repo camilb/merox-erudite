@@ -6,7 +6,7 @@
 
 </div>
 
-**merox-erudite** is a customized version of the [astro-erudite](https://github.com/jktrn/astro-erudite) theme, enhanced with additional features and modifications for a more complete blogging experience..
+**merox-erudite** is a customized version of the [astro-erudite](https://github.com/jktrn/astro-erudite) theme, enhanced with additional features and modifications for a more complete blogging experience.
 
 > **📖 Want to learn more about the original theme?**  
 > This theme is based on [astro-erudite](https://github.com/jktrn/astro-erudite) by [@jktrn](https://github.com/jktrn). For detailed documentation, architecture details, and the original design philosophy, visit the [official astro-erudite repository](https://github.com/jktrn/astro-erudite).
